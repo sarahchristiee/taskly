@@ -1,8 +1,37 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 
 export default function Calendar() {
 
+  const [tarefas, setTarefas] = useState([])
+
+  // puxando da api
+  useEffect(() => {
+  fetch('http://127.0.0.1:8000/api/tarefas/', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    }
+  })
+    .then(res => res.json())
+    .then(data => setTarefas(data))
+    .catch(err => console.error(err))
+}, [])
+
+useEffect(() => {
+  console.log(tarefas)
+}, [tarefas])
+
+  // tarefa marcada por dia
+  const tarefasDoDia = (dia) => {
+    const mesFormatado = String(mes + 1).padStart(2, '0')
+    const diaFormatado = String(dia).padStart(2, '0')
+
+    const dataCompleta = `${ano}-${mesFormatado}-${diaFormatado}`
+
+    return tarefas.filter(tarefa =>
+      tarefa.data.startsWith(dataCompleta)
+    )
+  }
   const [dataAtual, setDataAtual] = useState(new Date());
 
   const mes = dataAtual.getMonth();
@@ -57,6 +86,14 @@ export default function Calendar() {
             <span className="absolute top-2 left-2 text-sm font-semibold">
               {dia}
             </span>
+
+            <div className="flex flex-col gap-1 text-xs mt-8">
+              {tarefasDoDia(dia).map(tarefa => (
+                <span key={tarefa.id} className='bg-[#03045E] text-white p-4 rounded-full' >
+                  {tarefa.titulo}
+                </span>
+              ))}
+            </div>
           </div>
                     ) : (
             <div key={idd} className='bg-gray-100' ></div>

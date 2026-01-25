@@ -41,37 +41,36 @@ export default function Card() {
         }
     }
 
-    // Muda o status
+    // Muda o status pelo check
     const toggleStatus = async (tarefa) => {
-  try {
-    const response = await fetch(
-      `http://127.0.0.1:8000/api/tarefas/${tarefa.id}/`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: !tarefa.status,
-        }),
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/tarefas/${tarefa.id}/`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              status: !tarefa.status,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erro ao atualizar status");
+        }
+
+        const novaLista = await fetch("http://127.0.0.1:8000/api/tarefas/")
+          .then(res => res.json())
+
+        setTarefas(novaLista)
+
+      } catch (error) {
+        console.error(error);
+        toast.error("Erro ao atualizar status");
       }
-    );
-
-    if (!response.ok) {
-      throw new Error("Erro ao atualizar status");
-    }
-
-    // atualiza o estado local
-    setTarefas((prev) =>
-      prev.map((t) =>
-        t.id === tarefa.id ? { ...t, status: !tarefa.status } : t
-      )
-    );
-  } catch (error) {
-    console.error(error);
-    toast.error("Erro ao atualizar status");
-  }
-};
+    };
 
 
 
@@ -107,7 +106,8 @@ export default function Card() {
             </div> 
             <div className='flex gap-10'>
               <p className="text-gray-500">
-                Data limite: {new Date(tarefa.data).toLocaleDateString("pt-BR")}
+                Data limite: { tarefa.data.split("T")[0].split("-").reverse().join("/")}
+
               </p>
               <p className=" ">
                 Status:{" "}
