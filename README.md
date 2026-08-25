@@ -47,6 +47,12 @@ Este projeto foi feito para estudo de React e Django, este site tem o intuito de
 
 ---
 
+## 🎨 Prototipação
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" width="40" alt="Figma" />
+  [Acesse a prototipação](https://www.figma.com/design/ZAP6qolr2wTNe9ayK1K87p/Taskly?node-id=0-1&t=RF30stCKMKzWeufb-1)
+
+---
+
 ## 📦 Pré-requisitos
 
 Instale antes de rodar o projeto:
